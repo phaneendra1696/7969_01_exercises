@@ -6,7 +6,7 @@
 def least_sales(df):
     # write code to return pandas dataframe
 	ls = df.groupby(["Item"])["Sale_amt"].min().reset_index()
-    return ls
+    	return ls
 
 # Q2 compute total sales at each year X region
 def sales_year_region(df):
