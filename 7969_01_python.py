@@ -100,7 +100,7 @@ def bonus1(df):
     for j in range(16,44):
         if i[1][j]==1:
             temp+=str(columns[j-16])+" "
-    genre_combo.append(temp)
+    	genre_combo.append(temp)
 	df['Genre_combo']=genre_combo
 	ls=df.groupby(['year','type','Genre_combo']).agg({'imdbRating':['min','max','mean'],'duration':'sum'})
 	return ls
@@ -128,20 +128,20 @@ def bonus2(d):
 #Bonus4
 def bonus4(df):
 	grouped=df.groupby(['title_year'])
-    top10_gross=grouped.apply(lambda x: x.sort_values(by='gross',ascending=False).head(1 if int(0.1*len(x))==0 else int(0.1*len(x)) )).reset_index(drop=True)
-    top10_grouped=top10_gross.groupby(['title_year','genres'])
-    top_movies=top10_grouped.agg({'imdb_score':'mean'})
-    top_movies['no.of top movies']=top10_grouped.apply(lambda x:len(x))
-    return top_movies
+    	top10_gross=grouped.apply(lambda x: x.sort_values(by='gross',ascending=False).head(1 if int(0.1*len(x))==0 else int(0.1*len(x)) )).reset_index(drop=True)
+    	top10_grouped=top10_gross.groupby(['title_year','genres'])
+    	top_movies=top10_grouped.agg({'imdb_score':'mean'})
+    	top_movies['no.of top movies']=top10_grouped.apply(lambda x:len(x))
+    	return top_movies
 
 #Bonus5
 def bonus5(df):
 	df['decile']=pd.qcut(imdb['duration'],10,labels=np.arange(1,11,1))
-    grpby_obj=df.groupby('decile')
-    imdb1=grpby_obj.agg({'nrOfNominations':sum,'nrOfWins':sum,'fn':'count'})
-    genrestab=df.iloc[:,np.r_[8,17:45]]
-    z=genrestab.groupby('decile')[genrestab.columns.tolist()[1:28]].sum().transpose()
-    e=pd.DataFrame(z.apply(lambda x: x.nlargest(3).index,axis=0).transpose(),)
-    e.columns=["1","2","3"]
-    imdb1['top3_genre']=e["1"]+";"+e["2"]+";"+e["3"]
-    return imdb1
+   	 grpby_obj=df.groupby('decile')
+   	 imdb1=grpby_obj.agg({'nrOfNominations':sum,'nrOfWins':sum,'fn':'count'})
+    	genrestab=df.iloc[:,np.r_[8,17:45]]
+    	z=genrestab.groupby('decile')[genrestab.columns.tolist()[1:28]].sum().transpose()
+    	e=pd.DataFrame(z.apply(lambda x: x.nlargest(3).index,axis=0).transpose(),)
+    	e.columns=["1","2","3"]
+    	imdb1['top3_genre']=e["1"]+";"+e["2"]+";"+e["3"]
+    	return imdb1
