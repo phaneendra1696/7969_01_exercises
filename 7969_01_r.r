@@ -18,14 +18,14 @@ df<-read_xlsx("SaleData.xlsx")
 
 least_sales<-function(df)
 {
-  return (tapply(df$Sale_amt,df$Item,FUN=min))
+  ls<-df%>% group_by(Item) %>% summarise((least_sales=min(Sale_amt)))
+  return(ls)
 }
 
 sales_year_region<-function(df)
 { 
-  ans.1<-tapply(df$Sale_amt,df$Region,FUN=sum)
-  ans.2<-tapply(df$Sale_amt,year(df$OrderDate),FUN=sum)
-  return(list(ans.1,ans.2))
+  ls<-df%>% group_by(year,Region) %>% summarise((sum_sales=sum(Sale_amt)))
+  return(ls)
 }
 
 days_diff<-function(df,ref.date)
@@ -36,8 +36,7 @@ days_diff<-function(df,ref.date)
 }
 
 mgr_slsmn<-function(df)
-{ a<-df %>%group_by(Manager) %>%arrange(SalesMan) %>%
-  unique() %>%  summarise(Sale=list(unique(SalesMan))) %>%ungroup()
+{ a<-df %>%group_by(Manager) %>%arrange(SalesMan) %>% unique() %>%  summarise(Sale=list(unique(SalesMan))) %>%ungroup()
 return (a)
 }
 
@@ -97,7 +96,7 @@ volume<-function(df.3)
   x<-na.omit(df.3)
   x<-unfactor(x)
   x$volume <- ifelse(x$depth>60,(x$x)*(x$y)*(as.integer(x$z)), 8)
-  print((x))
+  return(x)
 }
 
 impute<-function(df.3)
